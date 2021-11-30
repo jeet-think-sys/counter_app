@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "./Button";
-const Buttons = ({ count, toggleSwitch, reset, isCounting }) => {
+
+import CounterContext from "./Context";
+
+const Buttons = ({ toggleSwitch, reset }) => {
+  const { count, isCounting } = useContext(CounterContext);
+
   return (
     <div>
       {count ? (

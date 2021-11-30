@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 
 import { useCounter } from "../hooks/hooks";
+import CounterContext from "./components/Context";
+
 import Input from "./components/Input";
-import Buttons from "./components/Buttons";
+import Count from "./components/Count";
 import Counts from "./components/Counts";
+import Buttons from "./components/Buttons";
 import CountList from "./components/CountList";
 import TimeStampList from "./components/TimeStampList";
-import Count from "./components/Count";
 
 const COUNTS_DEFAULT_VALUE = { start: 0, pause: 0 };
 
 const Counter = () => {
-  const [isCounting, setIsCounting] = useState(false);
   const [details, setDetails] = useState([]);
+  const [inputValue, setInputValue] = useState(0);
+  const [isCounting, setIsCounting] = useState(false);
   const [countDetails, setCountDetails] = useState([]);
   const [counts, setCounts] = useState(COUNTS_DEFAULT_VALUE);
-  const [inputValue, setInputValue] = useState(0);
 
   const [count, { start, pause, setter: setCount }] = useCounter(0);
 
@@ -69,21 +71,20 @@ const Counter = () => {
     };
 
   return (
-    <div>
-      <Input value={inputValue} name="count" onChange={getCount} />
-      <Count count={count} />
-      <Buttons
-        count={count}
-        isCounting={isCounting}
-        toggleSwitch={toggleSwitch}
-        reset={reset}
-      />
-      <Counts counts={counts} />
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <TimeStampList details={details} />
-        <CountList details={countDetails} />
+    <CounterContext.Provider
+      value={{ isCounting, details, countDetails, counts, count }}
+    >
+      <div>
+        <Input value={inputValue} name="count" onChange={getCount} />
+        <Count />
+        <Buttons toggleSwitch={toggleSwitch} reset={reset} />
+        <Counts />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <TimeStampList />
+          <CountList />
+        </div>
       </div>
-    </div>
+    </CounterContext.Provider>
   );
 };
 
