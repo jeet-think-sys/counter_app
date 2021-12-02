@@ -23,22 +23,21 @@ const Counter = () => {
     setCountDetails,
     setCount,
   } = actions;
-  const [count, { start, pause }] = useCounter(0, (val) => {
+  const [, { start, pause, setter }] = useCounter(0, (val) => {
     setCount(val);
   });
 
-  const selected = useSelector(
-    ({ inputValue, counts, isCounting, countDetails, details }) => ({
-      inputValue,
-      counts,
-      isCounting,
-      countDetails,
-      details,
-    })
-  );
-  const { inputValue, counts, isCounting, countDetails, details } = selected;
-
-  console.log("selected", selected);
+  const { count, inputValue, counts, isCounting, countDetails, details } =
+    useSelector(
+      ({ inputValue, counts, isCounting, countDetails, details, count }) => ({
+        inputValue,
+        counts,
+        isCounting,
+        countDetails,
+        details,
+        count,
+      })
+    );
   useEffect(() => {
     if (count === 0 && inputValue !== 0) {
       updateList(false);
@@ -64,8 +63,9 @@ const Counter = () => {
       setIsCounting(!isCounting);
     },
     getCount = ({ target }) => {
-      const value = target.value;
+      const value = target.value ? parseInt(target.value) : "";
       setCount(value);
+      setter(value);
       setInputValue(value);
       pause();
     },
@@ -85,6 +85,7 @@ const Counter = () => {
       setCountDetails([]);
       setCounts(COUNTS_DEFAULT_VALUE);
       setCount(inputValue);
+      setter(inputValue);
       setIsCounting(false);
     };
 

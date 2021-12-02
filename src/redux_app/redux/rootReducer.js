@@ -16,7 +16,6 @@ const rootReducer = (state = getInitialState(), action) => {
       return {
         ...state,
         inputValue: action.inputValue,
-        count: action.inputValue,
       };
     }
     case SET_COUNT:

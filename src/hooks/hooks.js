@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { bindActionCreators } from "redux";
 import { useDispatch } from "react-redux";
 
-export const useCounter = (defaultValue = 0, hook) => {
+export const useCounter = (defaultValue = 0, action) => {
   const [value, setValue] = useState(defaultValue);
   const [countInterval, setCountInterval] = useState(null);
 
@@ -10,17 +10,16 @@ export const useCounter = (defaultValue = 0, hook) => {
     if (value === 0) {
       pause();
     }
+    if (action) {
+      action(value);
+    }
   }, [value]);
   const start = () => {
+      console.log();
       if (value) {
         setCountInterval(
           setInterval(() => {
-            setValue((val) => {
-              if (hook) {
-                hook(val - 1);
-              }
-              return val - 1;
-            });
+            setValue((val) => val - 1);
           }, 1000)
         );
       }
